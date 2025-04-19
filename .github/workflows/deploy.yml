@@ -34,10 +34,12 @@ jobs:
         run: npm install -g aws-cdk
 
       - name: Install dependencies
+        working-directory: ./cdk
         run: npm ci
 
       - name: Deploy
-        run: npm run -w cdk deploy
+        working-directory: ./cdk
+        run: npm run deploy
 
   build-and-deploy:
     environment:
