@@ -1,4 +1,4 @@
-name: Deploy Svelte site to Pages
+name: Deploy
 
 on:
   workflow_dispatch:
@@ -15,6 +15,30 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  cdk:
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install AWS CDK
+        run: npm install -g aws-cdk
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Deploy
+        run: npm run -w cdk deploy
+
   build-and-deploy:
     environment:
       name: github-pages
