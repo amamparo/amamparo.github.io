@@ -5,5 +5,5 @@ const { MyStack } = require('../lib/cdk-stack');
 
 const app = new cdk.App();
 new MyStack(app, 'Homepage', {
-  env: { account: '388646735826', region: 'us-east-1' }
+	env: { account: '388646735826', region: 'us-east-1' }
 });

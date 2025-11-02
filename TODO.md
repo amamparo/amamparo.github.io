@@ -1,15 +1,35 @@
-Turn this sveltekit app into a "linktree"-like lightweight one-page personal landing page / digital business card.
+Turn this sveltekit app into a lightweight one-page personal landing page / digital business card.
 
-* if applicable, install the latest version of existing dependencies
-* remove any unnecessary dependencies
-* install and use tailwind
-* the page should include:
-  * my headshot image (located currently in static/)
-  * my name ("Aaron Mamparo")
-  * links to my socials (linkedin, github, bluesky, instagram, last.fm, email)
-    * I'd like it to be easy to manage (add/remove/change) these links in one place
-    * please utilize the sites' logos/icons. if you can do so with built-in tailwind things, great. otherwise, you may install whatever font/icon packages are ncessary.
-* the site's look and feel should be minimalistic and modern, and should be mobile friendly
-* the site should respect the user's system color scheme (light/dark mode), defaulting to dark mode if no preference is detected
-  * in dark mode, use the headshot "headshot_dark.jpg" in static
-  * in light mode, use "headshot_light.jpg"
+## Requirements:
+
+* Install the latest version of existing dependencies if needed
+* Remove any unnecessary dependencies
+* Use Tailwind CSS (already installed)
+* The page should include:
+  * My headshot image (headshot_dark.jpg in static/)
+  * My name ("Aaron Mamparo")
+  * Links to my socials (linkedin, github, bluesky, instagram, last.fm, email)
+    * Links should be easy to manage in one place (e.g., a config file)
+    * Use icon library for social icons (lucide-svelte or similar)
+    * Links open in new tab
+
+## Design Requirements:
+
+* DARK MODE ONLY - no light mode support needed
+* Unique design - NOT like Linktree
+* Display only icons for social links (no text labels)
+* Add hover tooltips to show site names
+* Custom dark theme with colors from headshot_dark.jpg:
+  * Near-black background (#0a0a0f)
+  * Neon violet (#9945ff) and neon cyan (#00ffff) accents
+  * Subtle glowing effects
+* Icons in horizontal row, not stacked buttons
+* Minimalistic, modern, mobile-friendly
+* NO theme toggle - dark mode always
+
+## Technical Notes:
+
+* Social links configuration in src/lib/socials.js
+* Set dark styles directly, no dark: prefix needed
+* No localStorage, no theme detection, no toggle button
+* Simple and clean implementation
