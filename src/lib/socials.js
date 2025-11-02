@@ -26,12 +26,12 @@ export const socials = [
 	},
 	{
 		name: 'Last.fm',
-		url: 'https://last.fm/user/aaronmamparo',
+		url: 'https://last.fm/user/amamparo',
 		icon: 'lastfm'
 	},
 	{
 		name: 'Email',
-		url: 'mailto:aaron@mamparo.com',
+		url: 'mailto:aaronmamparo@gmail.com',
 		icon: 'email'
 	}
 ];

@@ -10,6 +10,9 @@
 	import { SiBluesky } from 'svelte-icons-pack/si';
 	import { SiSoundcloud } from 'svelte-icons-pack/si';
 	import { SiLastdotfm } from 'svelte-icons-pack/si';
+	import { onMount } from 'svelte';
+	
+	let mounted = false;
 	
 	const iconComponents = {
 		linkedin: { component: Linkedin, isLucide: true },
@@ -23,13 +26,20 @@
 	
 	// Calculate positions for icons in a circle
 	function getIconPosition(index, total) {
-		const angle = (index * 360 / total) - 90; // Start from top
-		const radius = 140; // Distance from center
+		const angle = (index * 360 / total) - 90; // Position around circle
+		const radius = 140; // Fixed radius
 		const radian = angle * Math.PI / 180;
 		const x = Math.cos(radian) * radius;
 		const y = Math.sin(radian) * radius;
-		return `transform: translate(${x}px, ${y}px)`;
+		return { x, y };
 	}
+	
+	onMount(() => {
+		// Trigger animation after a short delay
+		setTimeout(() => {
+			mounted = true;
+		}, 100);
+	});
 </script>
 
 <svelte:head>
@@ -54,35 +64,39 @@
 					</div>
 				</div>
 				
-				<!-- Social Icons arranged in circle -->
+				<!-- Social Icons carousel container -->
 				<div class="absolute inset-0 flex items-center justify-center">
-					{#each socials as social, index (social.name)}
-						<a
-							href={social.url}
-							target="_blank"
-							rel="noopener noreferrer"
-							title={social.name}
-							style={getIconPosition(index, socials.length)}
-							class="absolute p-3 rounded-full
-							       bg-transparent text-gray-400
-							       hover:text-neon-cyan
-							       border border-gray-800 hover:border-neon-cyan/50
-							       transition-all duration-300
-							       hover:shadow-[0_0_20px_rgba(0,255,255,0.3)]
-							       flex items-center justify-center"
-						>
-							{#if iconComponents[social.icon].isLucide}
-								<svelte:component 
-									this={iconComponents[social.icon].component} 
-									class="w-7 h-7 transition-transform duration-300 hover:scale-110" 
-								/>
-							{:else}
-								<div class="w-7 h-7 flex items-center justify-center transition-transform duration-300 hover:scale-110">
-									<Icon src={iconComponents[social.icon].component} size="28" />
-								</div>
-							{/if}
-						</a>
-					{/each}
+					<div class="absolute inset-0 {mounted ? 'carousel-stop' : 'carousel-spin'}">
+						{#each socials as social, index (social.name)}
+							{@const pos = getIconPosition(index, socials.length)}
+							<a
+								href={social.url}
+								target="_blank"
+								rel="noopener noreferrer"
+								title={social.name}
+								style="transform: translate({pos.x}px, {pos.y}px); transition-delay: {index * 75}ms; opacity: {mounted ? 1 : 0}"
+								class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-full
+								       bg-transparent text-gray-400
+								       hover:text-neon-cyan
+								       border border-gray-800 hover:border-neon-cyan/50
+								       hover:shadow-[0_0_20px_rgba(0,255,255,0.3)]
+								       flex items-center justify-center
+								       transition-opacity duration-700 ease-out
+								       {mounted ? '' : 'pointer-events-none'}"
+							>
+								{#if iconComponents[social.icon].isLucide}
+									<svelte:component 
+										this={iconComponents[social.icon].component} 
+										class="w-7 h-7 transition-transform duration-300 hover:scale-110" 
+									/>
+								{:else}
+									<div class="w-7 h-7 flex items-center justify-center transition-transform duration-300 hover:scale-110">
+										<Icon src={iconComponents[social.icon].component} size="28" />
+									</div>
+								{/if}
+							</a>
+						{/each}
+					</div>
 				</div>
 			</div>
 		</div>
@@ -104,5 +118,22 @@
 		margin: 0;
 		padding: 0;
 		background-color: #0a0a0f;
+	}
+	
+	:global(.carousel-spin) {
+		animation: carousel-rotate 2s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+	}
+	
+	:global(.carousel-stop) {
+		transform: rotate(0deg);
+	}
+	
+	@keyframes carousel-rotate {
+		from {
+			transform: rotate(360deg);
+		}
+		to {
+			transform: rotate(0deg);
+		}
 	}
 </style>
